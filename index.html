@@ -1,1 +1,241 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>IP Address Tracker with Coordinates</title><style> * { margin: 0; padding: 0; box-sizing: border-box; } body { font-family: 'Arial', sans-serif; background-color: #e9ecef; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; } .container { background-color: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); width: 450px; max-width: 100%; } h1 { text-align: center; color: #333; font-size: 28px; margin-bottom: 20px; } label { font-size: 16px; color: #333; margin-bottom: 10px; display: block; } input[type="text"] { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ddd; font-size: 16px; margin-bottom: 20px; background-color: #f9f9f9; transition: border 0.3s; } input[type="text"]:focus { border-color: #4CAF50; outline: none; } button { background-color: #4CAF50; color: #fff; border: none; padding: 15px 20px; border-radius: 8px; width: 100%; font-size: 16px; cursor: pointer; transition: background-color 0.3s; } button:hover { background-color: #45a049; } #result, #coordinates { margin-top: 25px; } ul { list-style: none; padding-left: 0; color: #555; } ul li { font-size: 16px; margin: 8px 0; } strong { color: #333; font-weight: bold; } #coordinates { background-color: #f1f1f1; border-radius: 8px; padding: 20px; margin-top: 20px; display: block; } #coordinates pre { font-family: 'Courier New', Courier, monospace; color: #333; white-space: pre-wrap; word-wrap: break-word; background-color: #ffffff; padding: 15px; border-radius: 8px; box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1); overflow-wrap: break-word; margin: 0; } .loading { text-align: center; font-size: 18px; color: #888; } /* Responsive Design */ @media (max-width: 600px) { .container { width: 90%; padding: 20px; } h1 { font-size: 24px; } input[type="text"], button { font-size: 14px; } ul li { font-size: 14px; } } </style></head><body><div class="container"><h1>RenXploit IP Address Tracker And Coorninat 🗿👍 </h1><!-- Form input untuk IP Address --><label for="ipInput">Masukan Target Ip Addres</label><input type="text" id="ipInput" placeholder="Enter IP Address" /><button id="trackBtn">Track IP</button><!-- Result section --><div id="result"><h2>Result:</h2><ul><li><strong>IP Address:</strong><span id="ip">N/A</span></li><li><strong>Hostname:</strong><span id="hostname">N/A</span></li><li><strong>City:</strong><span id="city">N/A</span></li><li><strong>Region:</strong><span id="region">N/A</span></li><li><strong>Country:</strong><span id="country">N/A</span></li><li><strong>Location (lat, long):</strong><span id="location">N/A</span></li><li><strong>Organization:</strong><span id="org">N/A</span></li><li><strong>Postal Code:</strong><span id="postal">N/A</span></li><li><strong>Timezone:</strong><span id="timezone">N/A</span></li><li><strong>IP Type:</strong><span id="iptype">N/A</span></li><li><strong>ASN (Autonomous System Number):</strong><span id="asn">N/A</span></li><li><strong>Company:</strong><span id="company">N/A</span></li></ul></div><!-- Coordinates --><div id="coordinates"><h2>Hasil Track Coordinat:</h2><div id="coordinateDetails" class="loading">Loading coordinates...</div></div></div><script> document.getElementById("trackBtn").addEventListener("click", () => { const ipInput = document.getElementById("ipInput").value.trim() || ""; // Ensure there's an IP address entered if (ipInput === "") { alert("Please enter a valid IP address."); return; } // Fetch data from ipinfo.io fetch(`https://ipinfo.io/${ipInput}/json?token=320653e67a8d08`) // Replace with your API token .then(response => response.json()) .then(data => { if (data.error) { alert("Error: Unable to fetch data for this IP address."); return; } // Populate the result section document.getElementById("ip").textContent = data.ip || "N/A"; document.getElementById("hostname").textContent = data.hostname || "N/A"; document.getElementById("city").textContent = data.city || "N/A"; document.getElementById("region").textContent = data.region || "N/A"; document.getElementById("country").textContent = data.country || "N/A"; document.getElementById("location").textContent = data.loc || "N/A"; document.getElementById("org").textContent = data.org || "N/A"; document.getElementById("postal").textContent = data.postal || "N/A"; document.getElementById("timezone").textContent = data.timezone || "N/A"; document.getElementById("iptype").textContent = data.ip_type || "N/A"; // Additional info document.getElementById("asn").textContent = data.asn || "N/A"; // ASN info document.getElementById("company").textContent = data.company || "N/A"; // Company info // Now fetch coordinates from Nominatim const [lat, lon] = data.loc.split(","); const nominatimUrl = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`; fetch(nominatimUrl) .then(response => response.json()) .then(coordData => { const coordDetails = ` Latitude: ${coordData.lat} Longitude: ${coordData.lon} Lokasi Lengkap: ${coordData.display_name || "N/A"} `; document.getElementById("coordinateDetails").textContent = coordDetails; }) .catch(error => { console.error("Error fetching coordinates:", error); document.getElementById("coordinateDetails").textContent = "Unable to retrieve coordinates."; }); }) .catch(error => { console.error("Error fetching data:", error); alert("There was an issue retrieving data. Please try again later."); }); }); </script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP Address Tracker with Coordinates</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e9ecef;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 450px;
+            max-width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+            transition: border 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 8px;
+            width: 100%;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #result, #coordinates {
+            margin-top: 25px;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 0;
+            color: #555;
+        }
+
+        ul li {
+            font-size: 16px;
+            margin: 8px 0;
+        }
+
+        strong {
+            color: #333;
+            font-weight: bold;
+        }
+
+        #coordinates {
+            background-color: #f1f1f1;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            display: block;
+        }
+
+        #coordinates pre {
+            font-family: 'Courier New', Courier, monospace;
+            color: #333;
+            white-space: pre-wrap; 
+            word-wrap: break-word;
+            background-color: #ffffff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            overflow-wrap: break-word;
+            margin: 0;
+        }
+
+        .loading {
+            text-align: center;
+            font-size: 18px;
+            color: #888;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .container {
+                width: 90%;
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            input[type="text"], button {
+                font-size: 14px;
+            }
+
+            ul li {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>RenXploit IP Address Tracker And Coorninat 🗿👍 </h1>
+
+        <!-- Form input untuk IP Address -->
+        <label for="ipInput">Masukan Target Ip Addres</label>
+        <input type="text" id="ipInput" placeholder="Enter IP Address" />
+        <button id="trackBtn">Track IP</button>
+
+        <!-- Result section -->
+        <div id="result">
+            <h2>Result:</h2>
+            <ul>
+                <li><strong>IP Address:</strong> <span id="ip">N/A</span></li>
+                <li><strong>Hostname:</strong> <span id="hostname">N/A</span></li>
+                <li><strong>City:</strong> <span id="city">N/A</span></li>
+                <li><strong>Region:</strong> <span id="region">N/A</span></li>
+                <li><strong>Country:</strong> <span id="country">N/A</span></li>
+                <li><strong>Location (lat, long):</strong> <span id="location">N/A</span></li>
+                <li><strong>Organization:</strong> <span id="org">N/A</span></li>
+                <li><strong>Postal Code:</strong> <span id="postal">N/A</span></li>
+                <li><strong>Timezone:</strong> <span id="timezone">N/A</span></li>
+                <li><strong>IP Type:</strong> <span id="iptype">N/A</span></li>
+                <li><strong>ASN (Autonomous System Number):</strong> <span id="asn">N/A</span></li>
+                <li><strong>Company:</strong> <span id="company">N/A</span></li>
+            </ul>
+        </div>
+
+        <!-- Coordinates -->
+        <div id="coordinates">
+            <h2>Hasil Track Coordinat:</h2>
+            <div id="coordinateDetails" class="loading">Loading coordinates...</div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("trackBtn").addEventListener("click", () => {
+            const ipInput = document.getElementById("ipInput").value.trim() || "";
+
+            // Ensure there's an IP address entered
+            if (ipInput === "") {
+                alert("Please enter a valid IP address.");
+                return;
+            }
+
+            // Fetch data from ipinfo.io
+            fetch(`https://ipinfo.io/${ipInput}/json?token=320653e67a8d08`) // Replace with your API token
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert("Error: Unable to fetch data for this IP address.");
+                        return;
+                    }
+
+                    // Populate the result section
+                    document.getElementById("ip").textContent = data.ip || "N/A";
+                    document.getElementById("hostname").textContent = data.hostname || "N/A";
+                    document.getElementById("city").textContent = data.city || "N/A";
+                    document.getElementById("region").textContent = data.region || "N/A";
+                    document.getElementById("country").textContent = data.country || "N/A";
+                    document.getElementById("location").textContent = data.loc || "N/A";
+                    document.getElementById("org").textContent = data.org || "N/A";
+                    document.getElementById("postal").textContent = data.postal || "N/A";
+                    document.getElementById("timezone").textContent = data.timezone || "N/A";
+                    document.getElementById("iptype").textContent = data.ip_type || "N/A";  // Additional info
+                    document.getElementById("asn").textContent = data.asn || "N/A";  // ASN info
+                    document.getElementById("company").textContent = data.company || "N/A";  // Company info
+                    
+                    // Now fetch coordinates from Nominatim
+                    const [lat, lon] = data.loc.split(",");
+                    const nominatimUrl = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`;
+
+                    fetch(nominatimUrl)
+                        .then(response => response.json())
+                        .then(coordData => {
+                            const coordDetails = `
+                                Latitude: ${coordData.lat}
+                                Longitude: ${coordData.lon}
+                                Lokasi Lengkap: ${coordData.display_name || "N/A"}
+                            `;
+                            document.getElementById("coordinateDetails").textContent = coordDetails;
+                        })
+                        .catch(error => {
+                            console.error("Error fetching coordinates:", error);
+                            document.getElementById("coordinateDetails").textContent = "Unable to retrieve coordinates.";
+                        });
+                })
+                .catch(error => {
+                    console.error("Error fetching data:", error);
+                    alert("There was an issue retrieving data. Please try again later.");
+                });
+        });
+    </script>
+</body>
+</html>
